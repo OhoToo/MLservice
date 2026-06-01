@@ -15,6 +15,29 @@ TARGET_COLUMN = "loan_status"
 APPROVED_LABEL = 1
 REJECTED_LABEL = 0
 
+NUMERIC_COLUMNS = [
+    "person_age",
+    "person_income",
+    "person_emp_exp",
+    "loan_amnt",
+    "loan_int_rate",
+    "loan_percent_income",
+    "cb_person_cred_hist_length",
+    "credit_score",
+]
+
+DEFAULT_FEATURE_VALUES: dict[str, Any] = {
+    "person_gender": "male",
+    "person_education": "Bachelor",
+    "person_emp_exp": 0,
+    "person_home_ownership": "RENT",
+    "loan_intent": "PERSONAL",
+    "loan_int_rate": 0,
+    "cb_person_cred_hist_length": 0,
+    "credit_score": 650,
+    "previous_loan_defaults_on_file": "No",
+}
+
 _model_bundle: dict[str, Any] | None = None
 
 
@@ -76,6 +99,39 @@ async def save_uploaded_model(file: UploadFile) -> dict[str, str]:
     return {"status": "success", "message": "Model uploaded successfully"}
 
 
+def _normalize_numeric_columns(df: pd.DataFrame) -> pd.DataFrame:
+    for column in NUMERIC_COLUMNS:
+        if column in df.columns:
+            df[column] = (
+                df[column]
+                .astype(str)
+                .str.strip()
+                .str.replace(",", ".", regex=False)
+                .replace({"": pd.NA, "nan": pd.NA, "None": pd.NA})
+            )
+            df[column] = pd.to_numeric(df[column], errors="coerce")
+    return df
+
+
+def _fill_optional_columns(df: pd.DataFrame, feature_columns: list[str]) -> pd.DataFrame:
+    for column in feature_columns:
+        if column not in df.columns and column in DEFAULT_FEATURE_VALUES:
+            df[column] = DEFAULT_FEATURE_VALUES[column]
+
+    if "loan_percent_income" not in df.columns and {"loan_amnt", "person_income"}.issubset(df.columns):
+        df["loan_percent_income"] = df["loan_amnt"] / df["person_income"]
+
+    for column, default_value in DEFAULT_FEATURE_VALUES.items():
+        if column in df.columns:
+            df[column] = df[column].fillna(default_value)
+
+    if "loan_percent_income" in df.columns and {"loan_amnt", "person_income"}.issubset(df.columns):
+        calculated_ratio = df["loan_amnt"] / df["person_income"]
+        df["loan_percent_income"] = df["loan_percent_income"].fillna(calculated_ratio)
+
+    return df
+
+
 def normalize_input_frame(df: pd.DataFrame, bundle: dict[str, Any]) -> pd.DataFrame:
     df = df.copy()
     target_column = bundle.get("target_column", TARGET_COLUMN)
@@ -85,6 +141,9 @@ def normalize_input_frame(df: pd.DataFrame, bundle: dict[str, Any]) -> pd.DataFr
 
     feature_columns = bundle.get("feature_columns")
     if feature_columns:
+        df = _normalize_numeric_columns(df)
+        df = _fill_optional_columns(df, feature_columns)
+
         missing_columns = [column for column in feature_columns if column not in df.columns]
         if missing_columns:
             raise HTTPException(

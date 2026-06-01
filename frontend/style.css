@@ -36,10 +36,12 @@ label {
   font-weight: 600;
 }
 
-input {
+input,
+select {
   padding: 10px;
   border: 1px solid #cbd5e1;
   border-radius: 8px;
+  background: white;
 }
 
 button {
@@ -63,4 +65,9 @@ pre {
   background: #111827;
   color: #d1d5db;
   border-radius: 8px;
+}
+
+.hint {
+  margin-top: 0;
+  color: #475569;
 }

@@ -24,6 +24,14 @@ VALID_RECORD = {
     "previous_loan_defaults_on_file": "No",
 }
 
+PARTIAL_RECORD = {
+    "person_age": 35,
+    "person_gender": "male",
+    "person_income": 85000,
+    "loan_amnt": 20000,
+    "loan_int_rate": "10,5",
+}
+
 
 def test_health() -> None:
     response = client.get("/health")
@@ -41,6 +49,19 @@ def test_predict_success() -> None:
     assert len(data) == 1
     assert data[0]["predicted_loan_status"] in {"approved", "rejected"}
     assert 0 <= data[0]["approval_probability"] <= 1
+
+
+def test_predict_success_with_optional_defaults_and_comma_decimal() -> None:
+    response = client.post("/predict", json=[PARTIAL_RECORD])
+    data = response.json()
+
+    assert response.status_code == 200
+    assert data[0]["person_education"] == "Bachelor"
+    assert data[0]["person_home_ownership"] == "RENT"
+    assert data[0]["cb_person_cred_hist_length"] == 0
+    assert data[0]["credit_score"] == 650
+    assert data[0]["loan_int_rate"] == 10.5
+    assert data[0]["predicted_loan_status"] in {"approved", "rejected"}
 
 
 def test_predict_from_csv_success() -> None:
@@ -62,6 +83,21 @@ def test_predict_from_csv_success() -> None:
     assert response.status_code == 200
     assert "roc_auc" in data
     assert len(data["data"]) == 2
+    assert data["data"][0]["predicted_loan_status"] in {"approved", "rejected"}
+
+
+def test_predict_from_csv_success_with_optional_defaults() -> None:
+    csv_content = "person_age,person_gender,person_income,loan_amnt,loan_int_rate\n35,male,85000,20000,10.5\n"
+
+    response = client.post(
+        "/predict-from-csv",
+        files={"file": ("records.csv", csv_content.encode(), "text/csv")},
+    )
+    data = response.json()
+
+    assert response.status_code == 200
+    assert data["roc_auc"] is None
+    assert len(data["data"]) == 1
     assert data["data"][0]["predicted_loan_status"] in {"approved", "rejected"}
 
 

@@ -43,7 +43,8 @@ mortgage-approval-service/
 │   └── models/
 │       └── best_model.pkl
 ├── data/
-│   └── loan_data.csv
+│   ├── loan_data.csv
+│   └── test_clients.csv
 ├── .sourcecraft/
 │   └── ci.yaml
 ├── .gitignore
@@ -113,6 +114,9 @@ backend/app/models/model.pkl
 
 ## API
 
+Пользовательский интерфейс доступен на главной странице `http://localhost:8000`. Swagger-документация для разработчика доступна по адресу `http://localhost:8000/docs`.
+
+
 ### GET `/health`
 
 Проверка состояния сервиса.
@@ -154,7 +158,30 @@ file
 
 Предсказание по одной или нескольким JSON-записям.
 
-Пример запроса:
+Обязательные поля для ручного ввода:
+
+- `person_age`;
+- `person_gender`;
+- `person_income`;
+- `loan_amnt`.
+
+Остальные поля можно не передавать. В этом случае сервис использует значения по умолчанию:
+
+| Поле | Значение по умолчанию |
+|---|---|
+| `person_education` | `Bachelor` |
+| `person_emp_exp` | `0` |
+| `person_home_ownership` | `RENT` |
+| `loan_intent` | `PERSONAL` |
+| `loan_int_rate` | `0` |
+| `loan_percent_income` | рассчитывается как `loan_amnt / person_income` |
+| `cb_person_cred_hist_length` | `0` |
+| `credit_score` | `650` |
+| `previous_loan_defaults_on_file` | `No` |
+
+Frontend автоматически заменяет запятую на точку в дробных числах. Например, `10,5` будет обработано как `10.5`.
+
+Пример полного запроса:
 
 ```json
 [
@@ -172,6 +199,21 @@ file
     "cb_person_cred_hist_length": 4,
     "credit_score": 680,
     "previous_loan_defaults_on_file": "No"
+  }
+]
+```
+
+
+Пример минимального запроса:
+
+```json
+[
+  {
+    "person_age": 35,
+    "person_gender": "male",
+    "person_income": 85000,
+    "loan_amnt": 20000,
+    "loan_int_rate": "10,5"
   }
 ]
 ```
@@ -205,6 +247,8 @@ file
 Предсказание по CSV-файлу.
 
 Если в CSV есть колонка `loan_status`, сервис дополнительно возвращает `roc_auc`.
+
+Для быстрой проверки можно загрузить файл `data/test_clients.csv`. В нём нет `loan_status`, поэтому `roc_auc` будет `null`, но сервис вернёт предсказания для всех строк.
 
 Пример ответа:
 
