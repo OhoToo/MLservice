@@ -4,7 +4,8 @@
   "private": true,
   "type": "module",
   "scripts": {
-    "lint": "eslint ."
+    "lint": "eslint .",
+    "build": "node scripts/check-static-files.js"
   },
   "devDependencies": {
     "@eslint/js": "^9.17.0",

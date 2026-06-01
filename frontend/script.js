@@ -1,6 +1,4 @@
-const API_URL = window.location.port === "8000"
-  ? window.location.origin
-  : "http://localhost:8000";
+const API_URL = window.location.port === "8000" ? window.location.origin : "http://localhost:8000";
 
 function showResult(elementId, data) {
   document.getElementById(elementId).textContent = JSON.stringify(data, null, 2);

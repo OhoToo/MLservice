@@ -12,8 +12,8 @@ from fastapi.staticfiles import StaticFiles
 from app.model_service import predict_csv_dataframe, predict_dataframe, save_uploaded_model
 from app.schemas import ClientData
 
-BASE_DIR = Path(__file__).resolve().parents[2]
-FRONTEND_DIR = BASE_DIR / "frontend"
+PROJECT_DIR = Path(__file__).resolve().parents[2]
+FRONTEND_DIR = PROJECT_DIR / "frontend"
 
 app = FastAPI(
     title="Mortgage Approval ML Service",
@@ -32,7 +32,7 @@ app.add_middleware(
 app.mount("/static", StaticFiles(directory=FRONTEND_DIR), name="static")
 
 
-@app.get("/")
+@app.get("/", include_in_schema=False)
 def root() -> FileResponse:
     return FileResponse(FRONTEND_DIR / "index.html")
 

@@ -8,7 +8,9 @@ export default [
       ecmaVersion: 2022,
       sourceType: "module",
       globals: {
+        console: "readonly",
         document: "readonly",
+        window: "readonly",
         fetch: "readonly",
         FormData: "readonly",
         Set: "readonly",

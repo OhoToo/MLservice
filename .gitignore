@@ -1,12 +1,41 @@
-__pycache__/
-*.py[cod]
-.pytest_cache/
-.ruff_cache/
+# Python virtual environments
 .venv/
 venv/
+ENV/
+env/
+
+# Python cache and test/lint cache
+__pycache__/
+*.py[cod]
+*$py.class
+.pytest_cache/
+.ruff_cache/
+.mypy_cache/
+.coverage
+htmlcov/
+
+# Frontend dependencies and build output
 node_modules/
+dist/
+build/
+coverage/
+
+# Logs and temporary files
+*.log
+*.tmp
+*.temp
+*.bak
+*.swp
+
+# OS and editor files
 .DS_Store
-backend/app/models/*.pkl
-!backend/app/models/.gitkeep
-ml/models/*.pkl
-!ml/models/.gitkeep
+Thumbs.db
+.idea/
+.vscode/
+
+# Local environment files
+.env
+.env.*
+
+# Keep trained models and dataset in the repository because the lab requires
+# a saved model artifact and reproducible local demo.

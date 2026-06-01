@@ -1,0 +1,33 @@
+on:
+  pull_request:
+    - workflows: [quality-check]
+      filter:
+        source_branches: ["**"]
+        target_branches: ["main", "master"]
+  push:
+    - workflows: [quality-check]
+      filter:
+        branches: ["main", "master"]
+
+workflows:
+  quality-check:
+    tasks:
+      - name: backend-checks
+        cubes:
+          - name: backend-lint-and-tests
+            image: docker.io/library/python:3.12
+            script:
+              - cd backend
+              - python -m pip install --upgrade pip setuptools wheel
+              - python -m pip install --only-binary=:all: -r requirements.txt
+              - ruff check .
+              - pytest
+      - name: frontend-checks
+        cubes:
+          - name: frontend-lint-and-build
+            image: docker.io/library/node:20
+            script:
+              - cd frontend
+              - npm install
+              - npm run lint
+              - npm run build
