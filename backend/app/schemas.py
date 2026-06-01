@@ -15,7 +15,7 @@ class ClientData(BaseModel):
     loan_amnt: float = Field(..., gt=0)
     loan_intent: str = Field(default="PERSONAL")
     loan_int_rate: float = Field(default=0, ge=0, le=100)
-    loan_percent_income: float | None = Field(default=None, ge=0, le=1)
+    loan_percent_income: float = Field(default=0.2, ge=0, le=100)
     cb_person_cred_hist_length: float = Field(default=0, ge=0, le=100)
     credit_score: int = Field(default=650, ge=0, le=900)
     previous_loan_defaults_on_file: str = Field(default="No")

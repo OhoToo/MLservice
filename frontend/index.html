@@ -19,18 +19,25 @@
 
     <section class="card">
       <h2>2. Данные клиента</h2>
-      <p class="hint">Поля со звёздочкой обязательные. Дробные числа можно вводить через точку или запятую.</p>
 
       <form id="predictionForm" class="grid-form">
         <label>
           Возраст *
-          <input name="person_age" type="number" min="10" max="150" step="1" value="35" required />
+          <input
+            name="person_age"
+            type="number"
+            min="10"
+            max="150"
+            step="1"
+            value="35"
+            required
+          />
         </label>
 
         <label>
-          Пол
-          <select name="person_gender">
-            <option value="male" selected>Мужской</option>
+          Пол *
+          <select name="person_gender" required>
+            <option value="male">Мужской</option>
             <option value="female">Женский</option>
           </select>
         </label>
@@ -49,12 +56,26 @@
 
         <label>
           Годовой доход *
-          <input name="person_income" type="number" min="1" step="1000" value="85000" required />
+          <input
+            name="person_income"
+            type="number"
+            min="1"
+            step="1000"
+            value="85000"
+            required
+          />
         </label>
 
         <label>
           Опыт работы
-          <input name="person_emp_exp" type="number" min="0" max="80" step="1" placeholder="По умолчанию: 0" />
+          <input
+            name="person_emp_exp"
+            type="number"
+            min="0"
+            max="80"
+            step="1"
+            placeholder="По умолчанию: 0"
+          />
         </label>
 
         <label>
@@ -70,49 +91,83 @@
 
         <label>
           Сумма кредита *
-          <input name="loan_amnt" type="number" min="1" step="500" value="20000" required />
+          <input
+            name="loan_amnt"
+            type="number"
+            min="1"
+            step="500"
+            value="20000"
+            required
+          />
         </label>
 
         <label>
           Цель кредита
-          <select name="loan_intent">
-            <option value="PERSONAL" selected>PERSONAL</option>
-            <option value="EDUCATION">EDUCATION</option>
-            <option value="MEDICAL">MEDICAL</option>
-            <option value="VENTURE">VENTURE</option>
-            <option value="HOMEIMPROVEMENT">HOMEIMPROVEMENT</option>
-            <option value="DEBTCONSOLIDATION">DEBTCONSOLIDATION</option>
-          </select>
+          <input
+            name="loan_intent"
+            type="text"
+            placeholder="Например: PERSONAL, EDUCATION, CAR, BUSINESS"
+          />
         </label>
 
         <label>
           Процентная ставка
-          <input name="loan_int_rate" type="text" inputmode="decimal" placeholder="Например: 10,5" />
+          <input
+            name="loan_int_rate"
+            type="text"
+            inputmode="decimal"
+            placeholder="Например: 10.5 или 10,5"
+          />
         </label>
 
         <label>
           Доля кредита от дохода
-          <input name="loan_percent_income" type="text" inputmode="decimal" placeholder="Если пусто, считается автоматически" />
+          <input
+            name="loan_percent_income"
+            type="text"
+            inputmode="decimal"
+            placeholder="Можно оставить пустым"
+          />
         </label>
 
         <label>
           Длина кредитной истории
-          <input name="cb_person_cred_hist_length" type="number" min="0" max="100" step="1" placeholder="По умолчанию: 0" />
+          <input
+            name="cb_person_cred_hist_length"
+            type="number"
+            min="0"
+            max="100"
+            step="1"
+            placeholder="По умолчанию: 0"
+          />
         </label>
 
         <label>
           Кредитный рейтинг
-          <input name="credit_score" type="number" min="0" max="900" step="1" placeholder="По умолчанию: 650" />
+          <input
+            name="credit_score"
+            type="number"
+            min="300"
+            max="850"
+            step="1"
+            placeholder="По умолчанию: 650"
+          />
         </label>
 
         <label>
           Были дефолты
           <select name="previous_loan_defaults_on_file">
+            <option value="">Не указано</option>
             <option value="No" selected>No</option>
             <option value="Yes">Yes</option>
           </select>
         </label>
       </form>
+
+      <p class="hint">
+        Поля со звёздочкой обязательные. Остальные можно оставить пустыми.
+        Дробные числа можно вводить через точку или запятую.
+      </p>
 
       <button id="predictBtn">Получить предсказание</button>
       <pre id="predictionResult"></pre>

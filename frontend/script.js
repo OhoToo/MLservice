@@ -75,10 +75,9 @@ function validateRecord(record) {
     throw new Error("Сумма кредита должна быть больше 0");
   }
 
-  if (record.loan_percent_income < 0 || record.loan_percent_income > 1) {
-    throw new Error("Доля кредита от дохода должна быть от 0 до 1");
+  if (record.loan_percent_income < 0 || record.loan_percent_income > 100) {
+  throw new Error("Доля кредита от дохода должна быть от 0 до 100");
   }
-
   if (record.loan_int_rate < 0 || record.loan_int_rate > 100) {
     throw new Error("Процентная ставка должна быть от 0 до 100");
   }
