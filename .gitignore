@@ -1,0 +1,12 @@
+__pycache__/
+*.py[cod]
+.pytest_cache/
+.ruff_cache/
+.venv/
+venv/
+node_modules/
+.DS_Store
+backend/app/models/*.pkl
+!backend/app/models/.gitkeep
+ml/models/*.pkl
+!ml/models/.gitkeep

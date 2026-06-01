@@ -1,0 +1,27 @@
+stages:
+  - lint
+  - test
+
+backend_lint:
+  stage: lint
+  image: python:3.11
+  script:
+    - cd backend
+    - pip install -r requirements.txt
+    - ruff check .
+
+backend_tests:
+  stage: test
+  image: python:3.11
+  script:
+    - cd backend
+    - pip install -r requirements.txt
+    - pytest
+
+frontend_lint:
+  stage: lint
+  image: node:20
+  script:
+    - cd frontend
+    - npm install
+    - npm run lint

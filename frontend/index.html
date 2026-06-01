@@ -1,0 +1,51 @@
+<!doctype html>
+<html lang="ru">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Mortgage Approval ML Service</title>
+  <link rel="stylesheet" href="/static/style.css" />
+</head>
+<body>
+  <main class="container">
+    <h1>Предсказание одобрения ипотеки</h1>
+
+    <section class="card">
+      <h2>1. Загрузка модели</h2>
+      <input id="modelFile" type="file" accept=".pkl" />
+      <button id="uploadModelBtn">Загрузить модель</button>
+      <pre id="modelResult"></pre>
+    </section>
+
+    <section class="card">
+      <h2>2. Данные клиента</h2>
+      <form id="predictionForm" class="grid-form">
+        <label>Возраст <input name="person_age" type="number" value="25" required /></label>
+        <label>Пол <input name="person_gender" value="female" required /></label>
+        <label>Образование <input name="person_education" value="Bachelor" required /></label>
+        <label>Годовой доход <input name="person_income" type="number" value="75000" required /></label>
+        <label>Опыт работы <input name="person_emp_exp" type="number" value="3" required /></label>
+        <label>Жильё <input name="person_home_ownership" value="RENT" required /></label>
+        <label>Сумма кредита <input name="loan_amnt" type="number" value="12000" required /></label>
+        <label>Цель кредита <input name="loan_intent" value="EDUCATION" required /></label>
+        <label>Процентная ставка <input name="loan_int_rate" type="number" step="0.01" value="10.5" required /></label>
+        <label>Доля кредита от дохода <input name="loan_percent_income" type="number" step="0.01" value="0.16" required /></label>
+        <label>Длина кредитной истории <input name="cb_person_cred_hist_length" type="number" value="4" required /></label>
+        <label>Кредитный рейтинг <input name="credit_score" type="number" value="680" required /></label>
+        <label>Были дефолты <input name="previous_loan_defaults_on_file" value="No" required /></label>
+      </form>
+      <button id="predictBtn">Получить предсказание</button>
+      <pre id="predictionResult"></pre>
+    </section>
+
+    <section class="card">
+      <h2>3. Предсказание из CSV</h2>
+      <input id="csvFile" type="file" accept=".csv" />
+      <button id="csvPredictBtn">Отправить CSV</button>
+      <pre id="csvResult"></pre>
+    </section>
+  </main>
+
+  <script src="/static/script.js"></script>
+</body>
+</html>
