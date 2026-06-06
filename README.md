@@ -427,3 +427,4 @@ git push
 - CI-сценарий SourceCraft.
 - Линтинг backend и frontend.
 - Backend API-тесты, включая успешные запросы.
+](https://github.com/OhoToo/MLservice)
